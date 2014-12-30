@@ -12,9 +12,9 @@ Use like:
 
 ```
   $ git checkout master
-  $ git sync
+  $ git sync                # aka git codereview sync
   $ git cleanup
 ```
 
-(Assuming you're contributing to Go with `git-codereview` and Gerrit, ala https://golang.org/doc/contribute.html)
-
+(Assuming you're contributing to Go with `git-codereview` and Gerrit;
+see https://golang.org/doc/contribute.html)
