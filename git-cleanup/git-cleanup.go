@@ -103,7 +103,7 @@ func changeIDLog() (ret []string) {
 		return v
 	}
 	defer func() { changeIDLogCache = ret }()
-	cmd := exec.Command("git", "log")
+	cmd := exec.Command("git", "log", "-F", "--grep", "Change-Id:")
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		log.Fatalf("pipe error: %v", err)
