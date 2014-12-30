@@ -46,7 +46,14 @@ func main() {
 			continue
 		}
 		if isSubmitted(branchChangeID(br)) {
-			log.Printf("Removing branch %s ...", br)
+			// Display a ref for the branch we're about to delete,
+			// so that if we screw up (never!), the user can get it back easily.
+			short, err := exec.Command("git", "rev-parse", "--short", "refs/heads/"+br).Output()
+			if err != nil {
+				log.Fatalf("Error running git rev-parse: %v", err)
+			}
+			short = bytes.TrimSpace(short)
+			log.Printf("Removing branch %s (%s) ...", br, short)
 			if out, err := exec.Command("git", "branch", "-D", br).CombinedOutput(); err != nil {
 				log.Printf("Error removing branch %s: %v, %s", br, err, out)
 			}
