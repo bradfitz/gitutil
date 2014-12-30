@@ -57,6 +57,18 @@ func main() {
 			if out, err := exec.Command("git", "branch", "-D", br).CombinedOutput(); err != nil {
 				log.Printf("Error removing branch %s: %v, %s", br, err, out)
 			}
+
+			// Remove corresponding tag, if there is one.
+			tag := br + ".mailed"
+			short, err = exec.Command("git", "rev-parse", "--short", "refs/tags/"+tag).Output()
+			if err != nil {
+				continue
+			}
+			short = bytes.TrimSpace(short)
+			log.Printf("Removing tag %s (%s) ...", tag, short)
+			if out, err := exec.Command("git", "tag", "-d", tag).CombinedOutput(); err != nil {
+				log.Printf("Error removing tag %s: %v, %s", tag, err, out)
+			}
 		}
 	}
 }
