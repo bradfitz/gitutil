@@ -29,6 +29,9 @@ func main() {
 			line = line[2:]
 			cur = true
 		}
+		if line == "" {
+			continue
+		}
 		branches = append(branches, line)
 		if cur {
 			curBranch = line
