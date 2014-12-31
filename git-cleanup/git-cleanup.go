@@ -46,9 +46,28 @@ func main() {
 			continue
 		}
 		if isSubmitted(branchChangeID(br)) {
-			log.Printf("Removing branch %s ...", br)
+			// Display a ref for the branch we're about to delete,
+			// so that if we screw up (never!), the user can get it back easily.
+			short, err := exec.Command("git", "rev-parse", "--short", "refs/heads/"+br).Output()
+			if err != nil {
+				log.Fatalf("Error running git rev-parse: %v", err)
+			}
+			short = bytes.TrimSpace(short)
+			log.Printf("Removing branch %s (%s) ...", br, short)
 			if out, err := exec.Command("git", "branch", "-D", br).CombinedOutput(); err != nil {
 				log.Printf("Error removing branch %s: %v, %s", br, err, out)
+			}
+
+			// Remove corresponding tag, if there is one.
+			tag := br + ".mailed"
+			short, err = exec.Command("git", "rev-parse", "--short", "refs/tags/"+tag).Output()
+			if err != nil {
+				continue
+			}
+			short = bytes.TrimSpace(short)
+			log.Printf("Removing tag %s (%s) ...", tag, short)
+			if out, err := exec.Command("git", "tag", "-d", tag).CombinedOutput(); err != nil {
+				log.Printf("Error removing tag %s: %v, %s", tag, err, out)
 			}
 		}
 	}
@@ -84,7 +103,7 @@ func changeIDLog() (ret []string) {
 		return v
 	}
 	defer func() { changeIDLogCache = ret }()
-	cmd := exec.Command("git", "log")
+	cmd := exec.Command("git", "log", "-F", "--grep", "Change-Id:")
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		log.Fatalf("pipe error: %v", err)
