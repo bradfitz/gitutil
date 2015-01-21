@@ -22,6 +22,7 @@ func main() {
 	repos := []string{
 		"golang.org/x/benchmarks",
 		"golang.org/x/blog",
+		"golang.org/x/build",
 		"golang.org/x/crypto",
 		"golang.org/x/debug",
 		"golang.org/x/example",
