@@ -37,12 +37,12 @@ func main() {
 			curBranch = line
 		}
 	}
-	if curBranch != "master" {
-		log.Fatalf("On branch %s; must be on master", curBranch)
+	if !isMainBranch(curBranch) {
+		log.Fatalf("On branch %s; must be on master or a dev branch", curBranch)
 	}
 
 	for _, br := range branches {
-		if br == "master" {
+		if isMainBranch(br) {
 			continue
 		}
 		if isSubmitted(branchChangeID(br)) {
@@ -85,6 +85,11 @@ func branchChangeID(br string) string {
 		return string(m[1])
 	}
 	return ""
+}
+
+// isMainBranch reports whether br is a shared development branch.
+func isMainBranch(br string) bool {
+	return br == "master" || strings.HasPrefix(br, "dev.")
 }
 
 func isSubmitted(changeID string) bool {
