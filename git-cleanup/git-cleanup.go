@@ -32,6 +32,11 @@ func main() {
 			line = line[2:]
 			targetBranch = line
 		}
+		if strings.HasPrefix(line, "+ ") {
+			// Branch is checked out in a worktree.
+			// We can't delete it anyway, so ignore it.
+			continue
+		}
 		if line == "" {
 			continue
 		}
