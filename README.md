@@ -5,7 +5,7 @@ For now only `git-cleanup`.
 Install with:
 
 ```
-  $ go get github.com/bradfitz/gitutil/git-cleanup
+  $ go get github.com/bradfitz/gitutil/git-cleanup@latest
 ```
 
 Use like:
