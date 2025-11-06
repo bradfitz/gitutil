@@ -85,7 +85,7 @@ var changeRx = regexp.MustCompile(`(?m)^\s*Change-Id: (I[0-9a-f]+)`)
 
 // returns change-id or the empty string
 func branchChangeID(br string) string {
-	out, err := exec.Command("git", "show", br).CombinedOutput()
+	out, err := exec.Command("git", "show", br, "--").CombinedOutput()
 	if err != nil {
 		log.Printf("Error running git show %v: %v: %s", br, err, out)
 	}
